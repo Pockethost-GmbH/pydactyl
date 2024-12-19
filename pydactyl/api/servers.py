@@ -80,6 +80,28 @@ class Servers(base.PterodactylAPI):
             mode='POST')
         return response
 
+    def transfer_server(self, server_id, node_id, allocation_id, additional_allocations=None, force=False):
+        """Suspend the server with the specified internal ID.
+
+        Args:
+            server_id(int): Pterodactyl Server ID.
+            node_id(int): Pterodactyl Node ID.
+            allocation_id(int): Pterodactyl Allocation ID.
+            additional_allocations(list[int]): Further allocation ids.
+            force(bool): skip node resource limit checks.
+        """
+        response = self._api_request(
+            endpoint='application/servers/{}/transfer'.format(server_id),
+            mode='POST',
+            data=dict(
+                node_id=node_id,
+                allocation_id=allocation_id,
+                additional_allocations=additional_allocations,
+                force=force,
+            ),
+        )
+        return response
+
     def rebuild_server(self, server_id):
         """Rebuild the server with the specified internal ID.
 
