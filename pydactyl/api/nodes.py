@@ -117,10 +117,10 @@ class Nodes(PterodactylAPI):
             public(bool): If the node should be public or not
         """
         data = locals()
+        data['scheme'] = USE_SSL[use_ssl]
         del data['self']
         del data['node_id']
         del data['use_ssl']
-        data['scheme'] = USE_SSL[use_ssl]
 
         response = self._api_request(
             endpoint='application/nodes/{}'.format(node_id), mode='PATCH',
