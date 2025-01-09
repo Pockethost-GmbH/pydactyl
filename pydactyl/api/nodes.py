@@ -85,7 +85,7 @@ class Nodes(PterodactylAPI):
                   behind_proxy=None, maintenance_mode=None, memory=None,
                   memory_overallocate=None, disk=None,
                   disk_overallocate=None, upload_size=None, daemon_sftp=None,
-                  daemon_listen=None):
+                  daemon_listen=None, public=None):
         """Update the configuration for an existing node.
 
         Modifies an existing node identified by node_id and updates any
@@ -114,6 +114,7 @@ class Nodes(PterodactylAPI):
             upload_size(int): Maximum size of uploads in file manager in MB
             daemon_sftp(int): Node's SFTP port (default 2022)
             daemon_listen(int): Wings listen port (default 8080)
+            public(bool): If the node should be public or not
         """
         data = locals()
         del data['self']
