@@ -81,13 +81,13 @@ class Servers(base.PterodactylAPI):
         return response
 
     def transfer_server(self, server_id, node_id, allocation_id, additional_allocations=None, force=False):
-        """Suspend the server with the specified internal ID.
+        """Transfer the server to a different node.
 
         Args:
-            server_id(int): Pterodactyl Server ID.
-            node_id(int): Pterodactyl Node ID.
-            allocation_id(int): Pterodactyl Allocation ID.
-            additional_allocations(list[int]): Further allocation ids.
+            server_id(int): Pterodactyl Server ID of the server to be moved.
+            node_id(int): Pterodactyl Node ID of the target node.
+            allocation_id(int): New Pterodactyl allocation ID (on the target node) to use for the primary allocation.
+            additional_allocations(list[int]): Further allocation IDs (on the target node).
             force(bool): skip node resource limit checks.
         """
         response = self._api_request(
