@@ -14,9 +14,9 @@ class Nodes(PterodactylAPI):
             params(dict): Extra parameters to pass, e.g. {'per_page': 300}
         """
         endpoint = 'application/nodes'
-        response = self._api_request(endpoint=endpoint,
-                                     includes=includes, params=params)
-        return PaginatedResponse(self, endpoint, response)
+        response = self._api_request(endpoint=endpoint, includes=includes,
+                                     params=params)
+        return PaginatedResponse(self, endpoint, response, params=params, includes=includes)
 
     def get_node_config(self, node_id):
         """Get the Wings configuration for the specified node.
@@ -151,7 +151,7 @@ class Nodes(PterodactylAPI):
         endpoint = 'application/nodes/{}/allocations'.format(node_id)
         response = self._api_request(endpoint=endpoint, includes=includes,
                                      params=params)
-        return PaginatedResponse(self, endpoint, response)
+        return PaginatedResponse(self, endpoint, response, params=params, includes=includes)
 
     def create_allocations(self, node_id, ip, ports, alias=None):
         """Create one or more allocations.

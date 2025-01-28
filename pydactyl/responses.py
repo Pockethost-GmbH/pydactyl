@@ -4,11 +4,13 @@
 class PaginatedResponse(object):
     """An iterable API response that returns paginated results."""
 
-    def __init__(self, client, endpoint, data):
+    def __init__(self, client, endpoint, data, params=None, includes=None):
         self._client = client
         self.data = data['data']
         self.endpoint = endpoint
         self.meta = data['meta']
+        self._original_params = params or {}  # Store original params
+        self._original_includes = includes  # Store original includes
 
     def __getitem__(self, item):
         if isinstance(item, int):
@@ -39,9 +41,11 @@ class PaginatedResponse(object):
             # PaginatedResponses are initialized with the first page of results
             return self
         if self._next_page_exists(self.meta):
-            params = {'page': self._iteration}
+            params = self._original_params.copy()  # Start with original params
+            params['page'] = self._iteration  # Add page number
             response = self._client._api_request(endpoint=self.endpoint,
-                                                 params=params)
+                                                 params=params,
+                                                 includes=self._original_includes)
             self.data = response['data']
             self.meta = response['meta']
             return self

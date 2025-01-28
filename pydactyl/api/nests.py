@@ -15,7 +15,7 @@ class Nests(PterodactylAPI):
         endpoint = 'application/nests'
         response = self._api_request(endpoint=endpoint, includes=includes,
                                      params=params)
-        return PaginatedResponse(self, endpoint, response)
+        return PaginatedResponse(self, endpoint, response, params=params, includes=includes)
 
     def get_nest_info(self, nest_id, includes=None, params=None):
         """Get detailed info for the specified nest.

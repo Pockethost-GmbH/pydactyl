@@ -37,7 +37,7 @@ class User(PterodactylAPI):
         endpoint = 'application/users'
         response = self._api_request(endpoint=endpoint,
                                      includes=includes, params=filters)
-        return PaginatedResponse(self, endpoint, response)
+        return PaginatedResponse(self, endpoint, response, params=params, includes=includes)
 
     def get_user_info(self, user_id=None, external_id=None, detail=True,
                       includes=None, params=None):

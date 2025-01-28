@@ -21,7 +21,7 @@ class ServersBase(base.PterodactylAPI):
         endpoint = 'client'
         response = self._api_request(endpoint=endpoint, includes=includes,
                                      params=params)
-        return PaginatedResponse(self, endpoint, response)
+        return PaginatedResponse(self, endpoint, response, params=params, includes=includes)
 
     def list_permissions(self):
         """Retries all available permissions.

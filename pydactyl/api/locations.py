@@ -16,7 +16,7 @@ class Locations(PterodactylAPI):
         endpoint = 'application/locations'
         response = self._api_request(endpoint=endpoint, includes=includes,
                                      params=params)
-        return PaginatedResponse(self, endpoint, response)
+        return PaginatedResponse(self, endpoint, response, params=params, includes=includes)
 
     def get_location_info(self, location_id, includes=None, params=None):
         """Get detailed info for the specified location.

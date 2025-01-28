@@ -18,7 +18,7 @@ class Servers(base.PterodactylAPI):
             self._api_request(endpoint=endpoint, includes=includes,
                               params=params),
             detail=True)
-        return PaginatedResponse(self, endpoint, response)
+        return PaginatedResponse(self, endpoint, response, params=params, includes=includes)
 
     def get_server_info(self, server_id=None, external_id=None, detail=False,
                         includes=None, params=None):
