@@ -6,6 +6,7 @@ from pydactyl.api.client.servers.backups import Backups
 from pydactyl.api.client.servers.base import ServersBase
 from pydactyl.api.client.servers.databases import Databases
 from pydactyl.api.client.servers.files import Files
+from pydactyl.api.client.servers.minecraft import MinecraftSoftware, MinecraftPlayers
 from pydactyl.api.client.servers.network import Network
 from pydactyl.api.client.servers.schedules import Schedules
 from pydactyl.api.client.servers.settings import Settings
@@ -56,6 +57,8 @@ class ClientServersAPI(ServersBase, ClientAPI):
         self._settings = None
         self._startup = None
         self._users = None
+        self._minecraft_software = None
+        self._minecraft_players = None
         super().__init__(*args, **kwargs)
 
     @property
@@ -97,3 +100,13 @@ class ClientServersAPI(ServersBase, ClientAPI):
     def users(self):
         self._users = Users(self._url, self._api_key)
         return self._users
+
+    @property
+    def minecraft_software(self):
+        self._minecraft_software = MinecraftSoftware(self._url, self._api_key)
+        return self._minecraft_software
+
+    @property
+    def minecraft_players(self):
+        self._minecraft_players = MinecraftPlayers(self._url, self._api_key)
+        return self._minecraft_players
