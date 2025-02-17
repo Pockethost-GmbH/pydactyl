@@ -443,7 +443,7 @@ class Servers(base.PterodactylAPI):
 
     def update_server_startup(self, server_id, egg_id=None,
                               environment={}, docker_image=None,
-                              startup_cmd=None, skip_scripts=None):
+                              startup_cmd=None, skip_scripts=None, skip_env_validation=None):
         """Updates the startup config for the specified server.
 
         Modifies the startup config of an existing server replacing any
@@ -514,7 +514,11 @@ class Servers(base.PterodactylAPI):
             'environment': merged_env
         }
 
+        params = {}
+        if skip_env_validation:
+            params['skip_env_validation'] = "true"
+
         response = self._api_request(
             endpoint='application/servers/{}/startup'.format(server_id),
-            mode='PATCH', data=data, json=False)
+            mode='PATCH', data=data, json=False, params=params)
         return response
