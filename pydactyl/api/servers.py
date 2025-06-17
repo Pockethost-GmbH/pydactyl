@@ -356,7 +356,7 @@ class Servers(base.PterodactylAPI):
 
 
 
-    def update_server_build(self, server_id, allocation_id, memory_limit=None,
+    def update_server_build(self, server_id, allocation_id=None, memory_limit=None,
                             swap_limit=None, disk_limit=None, cpu_limit=None,
                             io_limit=None, database_limit=None,
                             allocation_limit=None, backup_limit=None,
@@ -408,10 +408,12 @@ class Servers(base.PterodactylAPI):
             oom_disabled(bool): Disables OOM-killer on the Docker container.
         """
         data = {
-            'allocation': allocation_id,
             'limits': {},
             'feature_limits': {},
         }
+        
+        if allocation_id is not None:
+            data['allocation'] = allocation_id
 
         if memory_limit is not None:
             data['limits']['memory'] = memory_limit
