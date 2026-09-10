@@ -27,6 +27,18 @@ def get_logger() -> logging.Logger:
     return logger
 
 
+class TimeoutSession(requests.Session):
+    """Apply an optional client-wide requests timeout to each API call."""
+
+    def __init__(self, timeout):
+        super().__init__()
+        self.timeout = timeout
+
+    def request(self, method, url, **kwargs):
+        kwargs.setdefault('timeout', self.timeout)
+        return super().request(method, url, **kwargs)
+
+
 class PterodactylClient(object):
     """Provides a simplified interface to the Pterodactyl Panel API.
 
@@ -34,7 +46,8 @@ class PterodactylClient(object):
     """
 
     def __init__(self, url=None, api_key=None, backoff_factor=1, retries=3,
-                 extra_retry_codes=[], logger: logging.Logger = get_logger()):
+                 extra_retry_codes=[], logger: logging.Logger = get_logger(),
+                 timeout=None):
         """Initialize a Pterodactyl class instance.
 
         Args:
@@ -45,6 +58,7 @@ class PterodactylClient(object):
             extra_retry_codes(iter): list of additional integer HTTP status
                     codes to retry on, e.g. [502, 504]
             logger(logging.Logger): the logger that Pydactyl will use
+            timeout(float|tuple): Optional requests timeout (seconds).
         """
         if not url:
             raise ClientConfigError(
@@ -58,7 +72,7 @@ class PterodactylClient(object):
         self._url = url
         self._logger = logger
 
-        self._session = requests.Session()
+        self._session = requests.Session() if timeout is None else TimeoutSession(timeout)
         adapter = http_adapter(backoff_factor=backoff_factor,
                                retries=retries,
                                extra_retry_codes=extra_retry_codes)

@@ -206,7 +206,7 @@ class Servers(base.PterodactylAPI):
                       docker_image=None, startup_cmd=None, dedicated_ip=False,
                       start_on_completion=True, oom_disabled=True,
                       default_allocation=None, additional_allocations=None,
-                      external_id=None, description=None):
+                      external_id=None, description=None, threads=None):
         """Creates one or more servers in the specified locations.
 
         Creates server instance(s) and begins the install process using the
@@ -239,6 +239,8 @@ class Servers(base.PterodactylAPI):
             cpu_limit(int): CPU limit for the Docker container.  To allow
                     unlimited CPU usage set to 0.  To limit to one core set
                     to 100.  For four cores set to 400.
+            threads(str): Linux logical-CPU allowlist, e.g. "0-3,32-35".
+                    Omit to preserve existing behavior; empty string clears affinity.
             io_limit(int): Block IO weight for the Docker container.
                     Must be between 10 and 1000.
             database_limit(int): Maximum number of databases that can be
@@ -315,6 +317,9 @@ class Servers(base.PterodactylAPI):
             'description': description,
         }
 
+        if threads is not None:
+            data['limits']['threads'] = threads
+
         if default_allocation is not None:
             data['allocation'] = {'default': default_allocation,
                                   'additional': additional_allocations}
@@ -361,7 +366,7 @@ class Servers(base.PterodactylAPI):
                             io_limit=None, database_limit=None,
                             allocation_limit=None, backup_limit=None,
                             add_allocations=None,
-                            remove_allocations=None, oom_disabled=None):
+                            remove_allocations=None, oom_disabled=None, threads=None):
         """Updates the build configuration for an existing server.
 
         Modifies an existing server identified by allocation_id and updates
@@ -394,6 +399,8 @@ class Servers(base.PterodactylAPI):
             cpu_limit(int): CPU limit for the Docker container.  To allow
                     unlimited CPU usage set to 0.  To limit to one core set
                     to 100.  For four cores set to 400.
+            threads(str): Linux logical-CPU allowlist, e.g. "0-3,32-35".
+                    Omit to preserve existing behavior; empty string clears affinity.
             io_limit(int): Block IO weight for the Docker container.
                     Must be between 10 and 1000.
             database_limit(int): Maximum number of databases that can be
@@ -421,6 +428,8 @@ class Servers(base.PterodactylAPI):
             data['limits']['swap'] = swap_limit
         if disk_limit is not None:
             data['limits']['disk'] = disk_limit
+        if threads is not None:
+            data['limits']['threads'] = threads
         if cpu_limit is not None:
             data['limits']['cpu'] = cpu_limit
         if io_limit is not None:
