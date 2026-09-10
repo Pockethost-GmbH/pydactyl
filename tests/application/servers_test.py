@@ -150,6 +150,28 @@ class ServersTests(TestCase):
                                                            database_id=6)
         mock_api.assert_called_with(**expected)
 
+    @mock.patch('pydactyl.api.base.PterodactylAPI._api_request')
+    def test_cpu_affinity_create_and_build_payloads(self, mock_api):
+        mock_api.return_value = {'attributes': {
+            'relationships': {'variables': {'data': []}},
+        }}
+        for threads in (None, '', '0-3,32-35'):
+            self.client.servers.create_server(
+                'test server', 1, 2, 3, 1024, 0, 1024,
+                default_allocation=123, threads=threads,
+            )
+            limits = mock_api.call_args.kwargs['data']['limits']
+            if threads is None:
+                self.assertNotIn('threads', limits)
+            else:
+                self.assertEqual(limits['threads'], threads)
+            self.client.servers.update_server_build(server_id=42, threads=threads)
+            limits = mock_api.call_args.kwargs['data']['limits']
+            if threads is None:
+                self.assertNotIn('threads', limits)
+            else:
+                self.assertEqual(limits['threads'], threads)
+
     def test_create_server_without_allocation_or_location_raises(self):
         with self.assertRaisesRegex(BadRequestError, 'default_allocation'):
             self.client.servers.create_server('test server', 1, 1, 1, 0, 0, 0)
